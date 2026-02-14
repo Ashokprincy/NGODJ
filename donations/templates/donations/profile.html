@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-[32px] p-10 border border-slate-100 shadow-sm mb-10 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="flex items-center gap-6">
+            <div class="h-20 w-20 bg-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-black">
+                {{ user.username|first|upper }}
+            </div>
+            <div>
+                <h1 class="text-3xl font-black text-slate-900">{{ user.username }}</h1>
+                <p class="text-slate-500">Member since {{ user.date_joined|date:"F Y" }}</p>
+            </div>
+        </div>
+        <div class="bg-blue-50 px-8 py-4 rounded-3xl text-center border border-blue-100">
+            <span class="text-xs font-bold uppercase text-blue-600 tracking-widest block mb-1">Your Total Impact</span>
+            <span class="text-3xl font-black text-blue-700">${{ total_impact }}</span>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+        📜 Donation History
+    </h2>
+    <div class="bg-white rounded-[24px] border border-slate-100 overflow-hidden shadow-sm">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-slate-50 border-b border-slate-100">
+                <tr>
+                    <th class="px-6 py-4 text-xs font-black uppercase text-slate-400 tracking-wider">Campaign</th>
+                    <th class="px-6 py-4 text-xs font-black uppercase text-slate-400 tracking-wider">Date</th>
+                    <th class="px-6 py-4 text-xs font-black uppercase text-slate-400 tracking-wider text-right">Amount</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                {% for donation in donations %}
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="px-6 py-4 font-bold text-slate-700">{{ donation.campaign.title }}</td>
+                    <td class="px-6 py-4 text-slate-500 text-sm">{{ donation.date|date:"M d, Y" }}</td>
+                    <td class="px-6 py-4 font-black text-blue-600 text-right text-lg">${{ donation.amount }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="px-6 py-12 text-center text-slate-400 italic">
+                        You haven't made any donations yet. 
+                        <a href="{% url 'home' %}" class="text-blue-600 font-bold not-italic hover:underline">Browse Campaigns</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-[40px] p-12 border border-slate-100 shadow-2xl">
+        <div class="mb-10 text-center">
+            <span class="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">Welcome Back</span>
+            <h2 class="text-3xl font-bold mt-4 text-slate-900">Donor Login</h2>
+        </div>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            
+            <div class="form-container text-sm font-medium text-slate-600">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-600 hover:scale-[1.02] transition-all shadow-xl shadow-slate-200 mt-6">
+                Sign In
+            </button>
+        </form>
+
+        <div class="mt-10 pt-8 border-t border-slate-100 text-center">
+            <p class="text-slate-400 text-sm">
+                New to HopeBridge? 
+                <a href="{% url 'register' %}" class="text-blue-600 font-bold hover:underline ml-1">
+                    Create an account
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styling Django's auto-generated form labels and inputs */
+    .form-container p {
+        margin-bottom: 1.25rem;
+    }
+    .form-container label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        color: #475569;
+    }
+    .form-container input {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        background: #F8FAFC;
+        border: 2px solid #F1F5F9;
+        border-radius: 16px;
+        transition: all 0.2s;
+        outline: none;
+    }
+    .form-container input:focus {
+        border-color: #2563EB;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+</style>
+{% endblock %}

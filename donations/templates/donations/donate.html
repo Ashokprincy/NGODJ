@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <div class="bg-white rounded-[40px] p-12 border border-slate-100 shadow-2xl overflow-hidden">
+        
+        <div class="mb-10">
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 block mb-1">Impact Status</span>
+                    <h4 class="text-3xl font-black text-slate-900">${{ campaign.raised_amount }}</h4>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Goal: ${{ campaign.goal_amount }}</span>
+                    <span class="text-xl font-black text-blue-600">{{ progress|floatformat:0 }}%</span>
+                </div>
+            </div>
+            
+            <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(37,99,235,0.3)]" 
+                     style="width: {{ progress }}%"></div>
+            </div>
+        </div>
+
+        <hr class="border-slate-50 mb-10">
+
+        <div class="mb-10 text-center">
+            <span class="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">Secure Checkout</span>
+            <h2 class="text-3xl font-bold mt-4 text-slate-900">{{ campaign.title }}</h2>
+            <p class="text-slate-500 mt-2 text-sm italic">Join {{ campaign.donation_set.count }} others supporting this cause.</p>
+        </div>
+
+        <form method="POST" class="space-y-8" id="donationForm">
+            {% csrf_token %}
+            
+            <div>
+                <label class="block text-xs font-black uppercase text-slate-400 mb-4 tracking-widest text-center">Quick Select Amount</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" onclick="setAmount(25)" class="tier-btn py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-600 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/50 transition-all">
+                        $25
+                    </button>
+                    <button type="button" onclick="setAmount(50)" class="tier-btn py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-600 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/50 transition-all">
+                        $50
+                    </button>
+                    <button type="button" onclick="setAmount(100)" class="tier-btn py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-600 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/50 transition-all">
+                        $100
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-black uppercase text-slate-400 mb-3 tracking-widest">Or Enter Custom Amount</label>
+                <div class="relative">
+                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-300">$</span>
+                    <input 
+                        type="number" 
+                        name="amount" 
+                        id="amountInput"
+                        placeholder="0.00" 
+                        class="w-full pl-12 pr-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-3xl focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all text-2xl font-bold outline-none" 
+                        required
+                    >
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white py-6 rounded-[24px] font-black text-lg hover:bg-blue-700 hover:scale-[1.01] active:scale-95 transition-all shadow-2xl shadow-blue-200">
+                Complete Donation
+            </button>
+            
+            <p class="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                🔒 Encrypted & Secure Transaction
+            </p>
+        </form>
+    </div>
+
+    <div class="mt-12">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xs font-black uppercase text-slate-400 tracking-[0.2em]">Recent Supporters</h3>
+            <span class="h-px flex-grow bg-slate-100 ml-4"></span>
+        </div>
+        
+        <div class="space-y-3">
+            {% for donation in recent_donations %}
+            <div class="flex items-center justify-between bg-white/60 border border-white p-5 rounded-3xl backdrop-blur-md shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-sm uppercase">
+                        {{ donation.donor.username|first }}
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-900 text-sm">{{ donation.donor.username }}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{{ donation.date|timesince }} ago</p>
+                    </div>
+                </div>
+                <div class="text-blue-600 font-black text-lg">
+                    +${{ donation.amount }}
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8 border-2 border-dashed border-slate-200 rounded-[32px]">
+                <p class="text-slate-400 text-sm font-medium italic">Be the first to fuel this mission! 🚀</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function setAmount(value) {
+        const input = document.getElementById('amountInput');
+        input.value = value;
+        
+        document.querySelectorAll('.tier-btn').forEach(btn => {
+            btn.classList.remove('border-blue-600', 'text-blue-600', 'bg-blue-50');
+        });
+        event.currentTarget.classList.add('border-blue-600', 'text-blue-600', 'bg-blue-50');
+    }
+</script>
+{% endblock %}

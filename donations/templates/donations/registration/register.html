@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-[40px] p-12 border border-slate-100 shadow-2xl">
+        <div class="mb-10 text-center">
+            <span class="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">Join HopeBridge</span>
+            <h2 class="text-3xl font-bold mt-4">Create Account</h2>
+        </div>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div class="form-container text-sm font-medium text-slate-600">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-700 hover:scale-[1.02] transition-all shadow-xl shadow-blue-200 mt-6">
+                Sign Up
+            </button>
+        </form>
+        
+        <p class="mt-8 text-center text-slate-400 text-sm">
+            Already have an account? <a href="{% url 'login' %}" class="text-blue-600 font-bold">Login here</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    /* Quick CSS to make Django's default form look modern */
+    .form-container p { margin-bottom: 1.5rem; }
+    .form-container input { 
+        width: 100%; padding: 0.75rem 1rem; background: #F8FAFC; 
+        border: 2px solid #F1F5F9; border-radius: 12px; outline: none;
+    }
+    .form-container input:focus { border-color: #2563EB; }
+    .form-container .helptext { font-size: 0.75rem; color: #94A3B8; display: block; margin-top: 0.5rem; }
+</style>
+{% endblock %}
